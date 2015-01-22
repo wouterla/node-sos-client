@@ -1,59 +1,63 @@
-
+/// <reference path="../external-ts-definitions/request.d.ts" />
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var request = require('request');
-
-(function (PollResultStatus) {
-    PollResultStatus[PollResultStatus["SUCCESS"] = 0] = "SUCCESS";
-
-    PollResultStatus[PollResultStatus["FAILURE"] = 1] = "FAILURE";
-})(exports.PollResultStatus || (exports.PollResultStatus = {}));
-
-var PollResultStatus = exports.PollResultStatus;
-
-var Jenkins = (function (prototype, object) {
-    var JenkinsObj = Object.create(prototype);
-    return JenkinsObj;
-}
-
-Jenkins.prototype.poll = function (config, callback) {
-    var opts = {
-        auth: {
-            username: config.username,
-            password: config.password
-        },
-        rejectUnauthorized: false,
-        requestCert: true,
-        agent: false
-    };
-
-    request.get(config.url, opts, function (err, resp) {
-        if (err) {
-            return callback(err);
-        }
-
-        // console.log(resp.body);
-
-        var jenkinsResp = JSON.parse(resp.body);
-
-        var overallStatus = "blue";
-
-        jenkinsResp.jobs.forEach(function (job) {
-            state = _this.toPollResultStatus(job.color);
-            if (state == 1 /* FAILURE */) {
-                overallStatus = "red";
-            }
-        });
-        return callback(null, {
-            status: _this.toPollResultStatus(overallStatus),
-            id: "1"
-        });
-    });
-}
-
-Jenkins.prototype.toPollResultStatus = function (state) {
-    state = state.toLowerCase();
-    console.error("jenkins state:", state);
-    if (state.indexOf('blue') == 0 || state.indexOf('disabled') == 0 || state.indexOf('aborted') == 0) {
-        return 0 /* SUCCESS */;
+var PluginBase = require('../plugin');
+var Jenkins = (function (_super) {
+    __extends(Jenkins, _super);
+    function Jenkins() {
+        _super.apply(this, arguments);
     }
-    return 1 /* FAILURE */;
-}
+    Jenkins.prototype.poll = function (config, callback) {
+        var _this = this;
+        var opts = {
+            auth: {
+                username: config.username,
+                password: config.password
+            },
+            rejectUnauthorized: false,
+            requestCert: true,
+            agent: false
+        };
+        request.get(config.url, opts, function (err, resp) {
+            if (err) {
+                return callback(err);
+            }
+            console.log(resp.body);
+            var jenkinsResp = JSON.parse(resp.body);
+            var status = "blue";
+            jenkinsResp.jobs.forEach(function (job) {
+                state = _this.toPollResultStatus(job.color);
+                if (state == 1 /* FAILURE */) {
+                    status = "red";
+                }
+                //
+                //                if (job.color == "red") {
+                //                    status = "red"
+                //                }
+                // original:
+                //                if (job.color != "blue") {
+                //                    status = job.color;
+                //                }
+            });
+            return callback(null, {
+                status: _this.toPollResultStatus(status),
+                id: "1"
+            });
+        });
+    };
+    Jenkins.prototype.toPollResultStatus = function (state) {
+        state = state.toLowerCase();
+        console.error("jenkins state:", state);
+        if (state.indexOf('blue') == 0 || state.indexOf('disabled') == 0 || state.indexOf('aborted') == 0) {
+            return 0 /* SUCCESS */;
+        }
+        return 1 /* FAILURE */;
+    };
+    return Jenkins;
+})(PluginBase.PluginBase);
+exports.Jenkins = Jenkins;
