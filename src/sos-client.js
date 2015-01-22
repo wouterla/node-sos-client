@@ -5,6 +5,8 @@ var PluginBase = require("./plugin");
 var Bamboo = require("./plugins/bamboo");
 var Jenkins = require("./plugins/jenkins");
 
+var Player = require('player');
+
 var useMockDevice = false;
 
 function run(callback) {
@@ -35,6 +37,8 @@ function poll(callback, startupData) {
             default:
                 return callback(new Error("Invalid build type: " + build.type));
         }
+
+	updateSiren(startupData.sosDevice, startupData.sosDeviceInfo, { status: PluginBase.PollResultStatus.SUCCESS });
         process.nextTick(pollBuild.bind(null, build, startupData));
     });
     return callback();
@@ -57,12 +61,13 @@ function pollBuild(build, startupData) {
 }
 
 function updateSiren(sosDevice, sosDeviceInfo, pollResult) {
+    console.log("Status: " + pollResult.status);
     if (pollResult.status == PluginBase.PollResultStatus.FAILURE) {
         var controlPacket = {
-            audioMode: sosDeviceInfo.audioPatterns[0].id,
-            audioPlayDuration: 1000,
-            ledMode: sosDeviceInfo.ledPatterns[0].id,
-            ledPlayDuration: 5000
+            audioMode: 0, //sosDeviceInfo.audioPatterns[0].id,
+            audioPlayDuration: 0,
+            ledMode: sosDeviceInfo.ledPatterns[2].id,
+            ledPlayDuration: 250000
         };
         console.log(controlPacket);
         sosDevice.sendControlPacket(controlPacket, function (err) {
@@ -70,10 +75,12 @@ function updateSiren(sosDevice, sosDeviceInfo, pollResult) {
                 console.error("Could not send SoS control packet", err);
             }
         });
+       var player = new Player('/home/dashboard/sounds/failed.mp3');
+       player.play();
     } else if (pollResult.status == PluginBase.PollResultStatus.SUCCESS) {
         var controlPacket = {
-            audioMode: sosDeviceInfo.audioPatterns[1].id,
-            audioPlayDuration: 500,
+            audioMode: 0, //sosDeviceInfo.audioPatterns[1].id,
+            audioPlayDuration: 0,
             ledMode: sosDeviceInfo.ledPatterns[0].id,
             ledPlayDuration: 500
         };
@@ -83,6 +90,9 @@ function updateSiren(sosDevice, sosDeviceInfo, pollResult) {
                 console.error("Could not send SoS control packet", err);
             }
         });
+	var okPlayer = new Player('/home/dashboard/sounds/fixed.mp3');
+
+	okPlayer.play();
     }
 }
 
