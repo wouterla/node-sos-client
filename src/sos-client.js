@@ -4,7 +4,6 @@ var sos = require('sos-device');
 var PluginBase = require("./plugin");
 var Bamboo = require("./plugins/bamboo");
 var Jenkins = require("./plugins/jenkins");
-
 var Player = require('player');
 
 var useMockDevice = false;
@@ -75,7 +74,7 @@ function updateSiren(sosDevice, sosDeviceInfo, pollResult) {
                 console.error("Could not send SoS control packet", err);
             }
         });
-       var player = new Player('/home/dashboard/sounds/failed.mp3');
+       var player = new Player('/home/dash/sounds/failed.mp3');
        player.play();
     } else if (pollResult.status == PluginBase.PollResultStatus.SUCCESS) {
         var controlPacket = {
@@ -90,7 +89,7 @@ function updateSiren(sosDevice, sosDeviceInfo, pollResult) {
                 console.error("Could not send SoS control packet", err);
             }
         });
-	var okPlayer = new Player('/home/dashboard/sounds/fixed.mp3');
+	var okPlayer = new Player('/home/dash/sounds/fixed.mp3');
 
 	okPlayer.play();
     }
