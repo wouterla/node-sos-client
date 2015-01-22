@@ -12,7 +12,7 @@ var PollResultStatus = exports.PollResultStatus;
 var Jenkins = (function (prototype, object) {
     var JenkinsObj = Object.create(prototype);
     return JenkinsObj;
-};
+}
 
 Jenkins.prototype.poll = function (config, callback) {
     var opts = {
@@ -47,7 +47,7 @@ Jenkins.prototype.poll = function (config, callback) {
             id: "1"
         });
     });
-};
+}
 
 Jenkins.prototype.toPollResultStatus = function (state) {
     state = state.toLowerCase();
@@ -56,4 +56,4 @@ Jenkins.prototype.toPollResultStatus = function (state) {
         return 0 /* SUCCESS */;
     }
     return 1 /* FAILURE */;
-};
+}
