@@ -59,7 +59,7 @@ function switchSiren(audioMode, audioDuration, ledMode, ledDuration) {
     var controlPacket = {
         audioMode: audioMode,
         audioPlayDuration: audioDuration,
-        ledMode: sosDeviceInfo.ledPatterns[ledMode].id,
+        ledMode: getSosDeviceInfo().ledPatterns[ledMode].id,
         ledPlayDuration: ledDuration
     };
     sosDevice.sendControlPacket(controlPacket, function (err) {
