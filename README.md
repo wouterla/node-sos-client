@@ -1,6 +1,6 @@
 # Siren of Shame Client
 
-## Install on a Raspberry Pi
+## Installation
 
 * Download node source code, extract, `./configure`, `make`, `sudo make install`
 * Install libusb: `sudo apt-get install libusb-dev`
@@ -8,7 +8,7 @@
 * `cd node-sos-client`
 * `npm install`
 * Copy config.json.example to config.json and edit.
-* `sudo node build/sos-client.js`
+* `sudo node src/sos-client.js`
 
 If you would like it to run as a service
 
