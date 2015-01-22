@@ -9,6 +9,8 @@ import PluginBase = module('plugin');
 import Bamboo = module('plugins/bamboo');
 import Jenkins = module('plugins/jenkins');
 
+var Player = require('player');
+
 var useMockDevice: boolean = false;
 
 interface ConfigBuild {
@@ -95,6 +97,8 @@ function updateSiren(sosDevice: SosDevice, sosDeviceInfo: SosDeviceAllInfo, poll
                 console.error("Could not send SoS control packet", err);
             }
         });
+        var player = new Player('/home/dash/sounds/failed.mp3');
+        player.play();
     } else if(pollResult.status == PluginBase.PollResultStatus.SUCCESS) {
         var controlPacket: SosDeviceControlPacket = {
             audioMode: sosDeviceInfo.audioPatterns[1].id,
@@ -109,6 +113,8 @@ function updateSiren(sosDevice: SosDevice, sosDeviceInfo: SosDeviceAllInfo, poll
             }
         });
     }
+    var okPlayer = new Player('/home/dash/sounds/fixed.mp3');
+    okPlayer.play();
 }
 
 function readConfig(callback: (err: Error, config?: Config) => void): void {

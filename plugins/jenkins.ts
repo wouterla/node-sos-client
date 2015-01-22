@@ -32,9 +32,19 @@ export class Jenkins extends PluginBase.PluginBase {
             var jenkinsResp:JenkinsResponse = <JenkinsResponse>JSON.parse(resp.body);
             var status = "blue";
             jenkinsResp.jobs.forEach(function (job) {
-                if (job.color != "blue") {
-                    status = job.color;
+                state = toPollResultStatus(job.color);
+                if (state == PluginBase.PollResultStatus.FAILURE) {
+                    status = red;
                 }
+                //
+//                if (job.color == "red") {
+//                    status = "red"
+//                }
+
+                // original:
+//                if (job.color != "blue") {
+//                    status = job.color;
+//                }
             });
 
             return callback(null, {
