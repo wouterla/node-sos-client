@@ -8,8 +8,7 @@ import sos = module('sos-device');
 import PluginBase = module('plugin');
 import Bamboo = module('plugins/bamboo');
 import Jenkins = module('plugins/jenkins');
-
-var Player = require('player');
+import Player = module('player');
 
 var useMockDevice: boolean = false;
 
@@ -86,10 +85,10 @@ function pollBuild(build: ConfigBuild, startupData: StartupData): void {
 function updateSiren(sosDevice: SosDevice, sosDeviceInfo: SosDeviceAllInfo, pollResult: PluginBase.PollResult) {
     if(pollResult.status == PluginBase.PollResultStatus.FAILURE) {
         var controlPacket: SosDeviceControlPacket = {
-            audioMode: sosDeviceInfo.audioPatterns[0].id,
-            audioPlayDuration: 1000,
+            audioMode: 0, // sosDeviceInfo.audioPatterns[0].id,
+            audioPlayDuration: 0, // 1000,
             ledMode: sosDeviceInfo.ledPatterns[0].id,
-            ledPlayDuration: 5000,
+            ledPlayDuration: 250000 // 5000,
         };
         console.log(controlPacket);
         sosDevice.sendControlPacket(controlPacket, function(err?) {
@@ -101,10 +100,10 @@ function updateSiren(sosDevice: SosDevice, sosDeviceInfo: SosDeviceAllInfo, poll
         player.play();
     } else if(pollResult.status == PluginBase.PollResultStatus.SUCCESS) {
         var controlPacket: SosDeviceControlPacket = {
-            audioMode: sosDeviceInfo.audioPatterns[1].id,
-            audioPlayDuration: 500,
+            audioMode: 0, // sosDeviceInfo.audioPatterns[1].id,
+            audioPlayDuration: 0, //500,
             ledMode: sosDeviceInfo.ledPatterns[0].id,
-            ledPlayDuration: 500,
+            ledPlayDuration: 500
         };
         console.log(controlPacket);
         sosDevice.sendControlPacket(controlPacket, function(err?) {
