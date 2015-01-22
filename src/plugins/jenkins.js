@@ -55,5 +55,5 @@ var Jenkins = (function () {
         return 1 /* FAILURE */;
     };
     return Jenkins;
-})(PluginBase.PluginBase);
+});
 exports.Jenkins = Jenkins;

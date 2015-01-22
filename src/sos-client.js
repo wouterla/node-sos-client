@@ -21,13 +21,13 @@ function poll(callback, startupData) {
         build.interval = build.interval || 30000;
         build.name = build.name || (build.type + (nameId++));
         build.lastPollResult = build.lastPollResult || {
-            status: PluginBase.PollResultStatus.SUCCESS,
+            status: Jenkins.PollResultStatus.SUCCESS,
             id: 0
         };
         build.plugin = new Jenkins.Jenkins();
 
         // Reset Siren
-        updateSiren(startupData.sosDevice, startupData.sosDeviceInfo, { status: PluginBase.PollResultStatus.SUCCESS });
+        updateSiren(startupData.sosDevice, startupData.sosDeviceInfo, { status: Jenkins.PollResultStatus.SUCCESS });
 
         process.nextTick(pollBuild.bind(null, build, startupData));
     });
