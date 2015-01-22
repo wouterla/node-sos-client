@@ -55,7 +55,7 @@ function playSound(filename) {
     player.play();
 }
 
-function switchSiren(sosDeviceInfo, audioMode, audioDuration, ledMode, ledDuration) {
+function switchSiren(sosDevice, sosDeviceInfo, audioMode, audioDuration, ledMode, ledDuration) {
     var controlPacket = {
         audioMode: audioMode,
         audioPlayDuration: audioDuration,
@@ -72,10 +72,10 @@ function switchSiren(sosDeviceInfo, audioMode, audioDuration, ledMode, ledDurati
 function updateSiren(sosDevice, sosDeviceInfo, pollResult) {
     console.log("Updating Sirent, Status: " + pollResult.status);
     if (pollResult.status == Jenkins.PollResultStatus.FAILURE) {
-        switchSiren(sosDeviceInfo, 0, 0, 2, 250000);
+        switchSiren(sosDevice, sosDeviceInfo, 0, 0, 2, 250000);
         playSound('/home/dash/sounds/failed.mp3');
     } else if (pollResult.status == Jenkins.PollResultStatus.SUCCESS) {
-        switchSiren(sosDeviceInfo, 0, 0, 0, 500);
+        switchSiren(sosDevice, sosDeviceInfo, 0, 0, 0, 500);
         playSound('/home/dash/sounds/fixed.mp3');
     }
 }
