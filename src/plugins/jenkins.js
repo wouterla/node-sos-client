@@ -31,7 +31,7 @@ var Jenkins = (function (_super) {
             var jenkinsResp = JSON.parse(resp.body);
             var status = "blue";
             jenkinsResp.jobs.forEach(function (job) {
-                state = toPollResultStatus(job.color);
+                state = _this.toPollResultStatus(job.color);
                 if (state == 1 /* FAILURE */) {
                     status = red;
                 }
