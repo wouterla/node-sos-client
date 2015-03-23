@@ -53,7 +53,9 @@ var Jenkins = (function (_super) {
     Jenkins.prototype.toPollResultStatus = function (state) {
         state = state.toLowerCase();
         console.error("jenkins state:", state);
-        if (state.indexOf('blue') == 0 || state.indexOf('disabled') == 0 || state.indexOf('aborted') == 0) {
+        if (state.indexOf('blue') == 0 || state.indexOf('disabled') == 0 ||
+            state.indexOf('aborted') == 0 || state.indexOf('notbuilt')
+        ) {
             return 0 /* SUCCESS */;
         }
         return 1 /* FAILURE */;
